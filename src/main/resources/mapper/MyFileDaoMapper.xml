@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zq.dao.MyFileDao">
+    <sql id="SELECT_SQL">select id,oldname,newname,end,path,sizes,type,ispic,acount</sql>
+
+    <insert id="insertFile">
+        insert into u_file
+        values(#{id},#{oldName},#{newName},#{end},#{path},#{sizes},#{type},#{isPic},#{acount})
+    </insert>
+
+    <select id="selectAll" resultType="MyFile">
+         <include refid="SELECT_SQL"/>
+        from u_file
+    </select>
+
+    <select id="selectByName" resultType="MyFile">
+         <include refid="SELECT_SQL"/>
+        from u_file
+        where newname=#{newName}
+    </select>
+    <update id="updateBy">
+        <selectKey keyProperty="acount" resultType="Integer" order="BEFORE">
+            select acount+1 from  u_file  where  newname=#{newName}
+        </selectKey>
+        update u_file set acount=#{acount}
+        where  newname=#{newName}
+    </update>
+
+    <delete id="deleteBy">
+        delete from u_file where newname=#{newName}
+    </delete>
+
+    
+
+</mapper>
